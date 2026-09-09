@@ -3,10 +3,12 @@ FROM python:3.14-alpine3.23
 WORKDIR /haproxy
 COPY . .
 
-RUN apk update && apk upgrade && apk add --no-cache haproxy=3.2.22-r0 uv=0.10.2-r0
+RUN apk update && apk upgrade && apk add --no-cache haproxy=3.2.23-r0 uv=0.10.2-r0
+
+RUN uv sync --frozen
 
 RUN crontab -l > cron
-RUN echo "0	0	1	*/2	*	/haproxy/renew_certs.sh > /certs/cert_renewal.log 2>&1" >> cron
+RUN echo "17	3	*	*	*	/haproxy/renew_certs.sh" >> cron
 RUN crontab cron
 
 CMD ["sh", "/haproxy/start.sh"]
