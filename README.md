@@ -55,7 +55,7 @@ systemctl enable --now docker
 
 ### Certs
 
-The default setup expects [ssl certificates](https://letsencrypt.org/) to already be present in the `certs` folder, and it expects `/etc/letsencrypt` to exist on the host. Once running the HAProxy container will automatically refresh the certificate every two months.
+The default setup expects [ssl certificates](https://letsencrypt.org/) to already be present in the `certs` folder, and it expects `/etc/letsencrypt` to exist on the host. Once running the HAProxy container checks the certificate daily and renews it once it is within 30 days of expiry, reloading HAProxy in place so the new certificate is served without a restart. Renewal attempts are logged to `certs/cert_renewal.log`.
 
 Initial certificate and config can be created by running these two commands from within the HAProxy container.
 
